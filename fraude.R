@@ -579,3 +579,13 @@ indicadoresPrism<-cbind(Prism1, Prism2, Prism3, Prism4,
                         indicadores$ENCUESTADOR, muestraFinal$FRAUDE )
 
 write.csv(indicadoresPrism, file="G:/prismFraude.csv")
+
+# Ejemplo de identificación de registros clasificados fraudulentos según
+# algoritmo PRISM de Weka
+prismFraude1<-which (indicadoresPrism[,5]=="BAJA"&indicadoresPrism[,7]=="TIEMPO BAJO"&
+                       indicadoresPrism[,1]=="TEE BAJO"&indicadoresPrism[,2]=="MATCH BAJO"&
+                       indicadoresPrism[,3]=="TASA R ALTO"&indicadoresPrism[,4]=="SI"&
+                       indicadoresPrism[,6]=="NO")
+
+
+prismFraude1 <- indicadoresPrism[c(prismFraude1),]
