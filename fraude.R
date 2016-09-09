@@ -117,8 +117,6 @@ variable30<-muestraFinal[,30]
 variable31<-muestraFinal[,31]
 variable32<-muestraFinal[,32]
 
-
-
 # Se crea una función que compara los valores en una variable de las observaciones i e i+1
 coincidencias<-function (datos){
   matches <- array(0,dimFil)
@@ -290,7 +288,6 @@ indicadores[298,8]
 indicadores[319,8]
 indicadores[321,8]
 
-
 #Indicador 7
 xyplot(as.numeric(indicadores$I7)~indicadores$ENCUESTADOR)
 par(mfrow= c (1,2), mar = c(5,4,2,1))
@@ -319,11 +316,8 @@ ftable(indicadores$I6~indicadores$ENCUESTADOR)
 par(mfrow = c(1,1))
 plot(indicadores$I6~indicadores$ENCUESTADOR, xlab="Encuestador", ylab="Indicador6")
 
-
-
 # b) INFERENCIA
 # ANOVA Y CHI-CUADRADO
-#http://www.ub.edu/stat/docencia/EADB/Anova.pdf
 
 boxplot(indicadores$I1~indicadores$ENCUESTADOR,
         col=terrain.colors(22), xlab="Encuestador", ylab="Indicador1")
@@ -404,8 +398,6 @@ balloonplot(t(dt6), main ="encuestador", xlab ="indicador6", ylab="encuestador",
 
 
 # ANALISIS FACTORIAL
-#http://www4.ujaen.es/~mramos/Cursos/CADIPI/REMEDI_14_Factorial.pdf
-
 
 I1<-round(indicadores$I1)
 I2<-round(indicadores$I2)
@@ -415,8 +407,6 @@ I5<-indicadores$I5
 I6<-indicadores$I6
 I7<-indicadores$I7
 indicadoresACP<-as.data.frame(cbind(I1,I2,I3,I4,I5,I6,I7))
-
-
 
 # ANÁLISIS FACTORIAL
 
@@ -438,8 +428,6 @@ names(indicadoresACP)[4]<-"I4"
 names(indicadoresACP)[5]<-"I5"
 names(indicadoresACP)[6]<-"I6"
 names(indicadoresACP)[7]<-"I7"
-
-
 
 # Matriz de correlaciones (Rcor)
 
@@ -469,11 +457,7 @@ kmo <- kmo.num/kmo.denom
 print(kmo)
 
 
-# ANALISIS FACTORIAL EXPLORATORIO ESTEEEEE
-
-#http://stats.stackexchange.com/questions/121271/what-is-the-meaning-of-the-r-factanal-output
-#http://www.statpower.net/Content/312/R%20Stuff/Exploratory%20Factor%20Analysis%20with%20R.pdf
-
+# ANALISIS FACTORIAL
 
 # Entrada de indicadores y extracción de 3 factores con la rotación varimax
 fit <- principal(indicadoresACP, nfactors=3, rotate="varimax")
@@ -491,47 +475,6 @@ head(CPA)
 load <- fit$loadings[,1:3] 
 plot(load,type="n") # set up plot 
 text(load,labels=names(indicadoresACP),cex=2) # se añaden el nombre de los indicadores
-
-
-# ANÁLISIS CLUSTER SOBRE ANÁLISIS FACTORIAL
-
-clusters <- hclust(dist(fit$scores), method="ward.D2")
-plot(clusters)
-clusterCut <- cutree(clusters, 2)
-table(clusterCut, indicadoresExploratorio[,8])
-
-
-# ANÁLISIS CLUSTER SOBRE DATOS ORIGINALES
-I1<-round(indicadores$I1)
-I2<-round(indicadores$I2)
-I3<-round(indicadores$I3)
-I4<-indicadores$I4
-I5<-indicadores$I5
-I6<-indicadores$I6
-I7<-indicadores$I7
-indicadoresACP<-as.data.frame(cbind(I1,I2,I3,I4,I5,I6,I7))
-
-#ESTEEEEE
-clusters <- hclust(dist(indicadores[,1:7]),method="ward.D2")
-plot(clusters)
-clusterCut <- cutree(clusters, 3)
-table(clusterCut,indicadores$ENCUESTADOR)
-
-
-
-
-
-
-data(indicadoresExploratorio) # Carga los datos de la base de datos 
-datos <- data.frame(indicadoresExploratorio[,1:7],clase=as.vector(indicadoresExploratorio[,8]))
-encuestador <- indicadoresExploratorio[,8] # La columna cinco se refiere a las especies
-fraude.lda <- lda(clase~.,datos)
-fraude.lda
-
-Call:
-lda(clase ~ ., data = datos)
-z<-predict(fraude.lda,datos[,1:7])$class #Para clasificar las observaciones
-Tabla <- table(encuestador,predict(fraude.lda,datos[,1:7])$class)
 
 # PREPARACIÓN DATOS PARA WEKA
 
@@ -581,7 +524,7 @@ indicadoresPrism<-cbind(Prism1, Prism2, Prism3, Prism4,
 write.csv(indicadoresPrism, file="G:/prismFraude.csv")
 
 # Ejemplo de identificación de registros clasificados fraudulentos según
-# algoritmo PRISM de Weka
+# algoritmo PRISM de salida de Weka
 prismFraude1<-which (indicadoresPrism[,5]=="BAJA"&indicadoresPrism[,7]=="TIEMPO BAJO"&
                        indicadoresPrism[,1]=="TEE BAJO"&indicadoresPrism[,2]=="MATCH BAJO"&
                        indicadoresPrism[,3]=="TASA R ALTO"&indicadoresPrism[,4]=="SI"&
